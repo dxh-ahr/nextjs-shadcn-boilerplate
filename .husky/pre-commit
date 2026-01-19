@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged for formatting and auto-fixing staged files
+pnpm lint-staged
+
+# Run type-check to ensure TypeScript types are valid
+pnpm type-check
+
+# Run lint to catch any remaining lint errors
+pnpm lint

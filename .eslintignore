@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+.next
+out
+build
+dist
+.vercel
+
+# Cache
+.cache
+.parcel-cache
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env*.local
+
+# Generated files
+next-env.d.ts
+*.tsbuildinfo
+
+# Public assets
+public
+
+# Config files that might have different formatting
+*.config.{js,mjs,ts}
+.eslintrc.*
+.prettierrc.*

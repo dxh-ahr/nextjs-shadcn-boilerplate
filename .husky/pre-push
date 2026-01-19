@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run tests to ensure all tests pass
+pnpm test:run
+
+# Run build to ensure the project compiles successfully
+pnpm build
