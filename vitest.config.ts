@@ -1,5 +1,5 @@
-import path from "node:path";
 import react from "@vitejs/plugin-react";
+import path from "node:path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -27,6 +27,7 @@ export default defineConfig({
       "**/.next/**",
       "**/out/**",
       "**/coverage/**",
+      "**/e2e/**", // Exclude e2e tests (handled by Playwright)
     ],
 
     // Coverage configuration
