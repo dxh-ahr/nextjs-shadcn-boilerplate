@@ -39,21 +39,49 @@ if [ "$NEEDS_INSTALL" = "true" ]; then
   echo "📋 Node version: $(node --version)"
   echo "📋 Working directory: $(pwd)"
 
-  # Remove node_modules if incomplete to prevent pnpm confirmation prompts
+  # Try to remove incomplete node_modules, but continue if it fails
+  # (e.g., if it's a Docker volume mount, we can't remove it)
   if [ -d "node_modules" ]; then
-    echo "🧹 Removing incomplete node_modules for clean install..."
-    rm -rf node_modules
+    echo "🧹 Attempting to clean incomplete node_modules..."
+    set +e  # Temporarily disable exit on error for removal attempt
+    rm -rf node_modules 2>/dev/null
+    REMOVE_STATUS=$?
+    set -e  # Re-enable exit on error
+
+    if [ $REMOVE_STATUS -ne 0 ]; then
+      echo "ℹ️  node_modules appears to be a Docker volume mount (cannot remove)"
+      echo "📦 pnpm will install/update packages in the mounted volume"
+    else
+      echo "✅ Cleaned node_modules successfully"
+    fi
   fi
 
   # Set non-interactive environment for pnpm (prevents confirmation prompts)
   export CI=true
+  export PNPM_HOME="/pnpm"
+  export PATH="$PNPM_HOME:$PATH"
 
   # Install dependencies - try with frozen lockfile first, fallback to regular install
   echo "📥 Running pnpm install (non-interactive mode)..."
-  # Use printf to send 'y' if pnpm prompts (though CI=true should prevent this)
-  if ! printf 'y\n' | pnpm install --frozen-lockfile 2>&1; then
+  set +e  # Temporarily disable exit on error for the install attempt
+  pnpm install --frozen-lockfile
+  INSTALL_STATUS=$?
+  set -e  # Re-enable exit on error
+
+  if [ $INSTALL_STATUS -ne 0 ]; then
     echo "⚠️  Frozen lockfile install failed, trying without frozen lockfile..."
-    printf 'y\n' | pnpm install 2>&1
+    set +e
+    pnpm install
+    INSTALL_STATUS=$?
+    set -e
+
+    if [ $INSTALL_STATUS -ne 0 ]; then
+      echo "❌ pnpm install failed with exit code $INSTALL_STATUS"
+      echo "📋 Checking pnpm and node versions..."
+      pnpm --version || echo "pnpm not found"
+      node --version || echo "node not found"
+      exit 1
+    fi
   fi
 
   # Wait a moment for file system to sync

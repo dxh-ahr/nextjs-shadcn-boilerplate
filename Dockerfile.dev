@@ -1,24 +1,19 @@
 FROM node:20-alpine
 
+# Enable corepack and prepare pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
 # Copy package files first for better layer caching
 COPY package.json pnpm-lock.yaml ./
+
 # Copy pnpm-workspace.yaml if it exists (optional for monorepos)
 COPY pnpm-workspace.yaml* ./
-
-# Install all dependencies (including devDependencies for development)
-# Use --frozen-lockfile to ensure consistent installs
-RUN pnpm install --frozen-lockfile
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-
-# Copy the rest of the application (this will be overridden by volume mount in dev)
-COPY . .
 
 # Expose port
 EXPOSE 3000
@@ -28,6 +23,15 @@ ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+# Set pnpm environment variables for better Docker compatibility
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+# Prevent pnpm from prompting
+ENV CI=true
+
+# Note: Dependencies will be installed by the entrypoint script
+# when the container starts, after volumes are mounted.
+# This ensures node_modules in the named volume are properly set up.
 
 # Use entrypoint to ensure dependencies are installed
 ENTRYPOINT ["/docker-entrypoint.sh"]
