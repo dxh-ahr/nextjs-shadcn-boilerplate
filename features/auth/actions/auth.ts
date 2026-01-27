@@ -2,43 +2,55 @@
 
 import {
   forgotPasswordSchema,
-  ForgotPasswordInput,
-  LoginInput,
   loginSchema,
   registerSchema,
-  RegisterInput,
   resetPasswordSchema,
-  ResetPasswordInput,
+  type ForgotPasswordInput,
+  type LoginInput,
+  type RegisterInput,
+  type ResetPasswordInput,
 } from "@/features/auth/validations/auth";
-import { z } from "zod";
-import type { ActionResult } from "./type";
+import { apiFetch } from "@/lib/api";
 
-export async function registerAction(
-  data: RegisterInput
-): Promise<ActionResult<{ email: string; name: string }>> {
+export async function registerAction(data: RegisterInput) {
   try {
-    const validated = registerSchema.parse(data);
+    const formData = registerSchema.parse(data);
 
-    // TODO: Implement actual registration logic
-    // Example: await createUser(validated);
+    const payload = {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      phone: "01777335815",
+      company_title: "Doxhi",
+      language: 1,
+      currency: 1,
+      plan: 1,
+      is_owner: true,
+      is_editor: false,
+      password1: formData.password,
+      password2: formData.confirmPassword,
+    };
+
+    const response = await apiFetch<{ key: string }>(
+      "/dj-rest-auth/registration/",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        requireAuth: false,
+      }
+    );
 
     return {
       success: true,
-      data: { email: validated.email, name: validated.name },
+      data: response,
     };
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      const fieldErrors: Record<string, string[]> = {};
-      error.issues.forEach((issue) => {
-        const path = issue.path.join(".");
-        fieldErrors[path] ??= [];
-        fieldErrors[path].push(issue.message);
-      });
-
+    if (error && typeof error === "object") {
       return {
         success: false,
-        error: "Validation failed",
-        fieldErrors,
+        error:
+          (error as { non_field_errors: string[] }).non_field_errors?.[0] ||
+          "Registration failed",
       };
     }
 
@@ -49,31 +61,32 @@ export async function registerAction(
   }
 }
 
-export async function loginAction(
-  data: LoginInput
-): Promise<ActionResult<{ email: string }>> {
+export async function loginAction(data: LoginInput) {
   try {
-    const validatedData = loginSchema.parse(data);
+    const formData = loginSchema.parse(data);
 
-    // TODO: Implement login api call
+    const payload: Record<string, unknown> = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    const response = await apiFetch<{ key: string }>("/dj-rest-auth/login/", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      requireAuth: false,
+    });
 
     return {
       success: true,
-      data: { email: validatedData.email },
+      data: response,
     };
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      const fieldErrors: Record<string, string[]> = {};
-      error.issues.forEach((issue) => {
-        const path = issue.path.join(".");
-        fieldErrors[path] ??= [];
-        fieldErrors[path].push(issue.message);
-      });
-
+    if (error && typeof error === "object") {
       return {
         success: false,
-        error: "Validation failed",
-        fieldErrors,
+        error:
+          (error as { non_field_errors: string[] }).non_field_errors?.[0] ||
+          "Login failed",
       };
     }
 
@@ -84,74 +97,107 @@ export async function loginAction(
   }
 }
 
-export async function forgotPasswordAction(
-  data: ForgotPasswordInput
-): Promise<ActionResult<{ email: string }>> {
+export async function forgotPasswordAction(data: ForgotPasswordInput) {
   try {
-    const validated = forgotPasswordSchema.parse(data);
+    const formData = forgotPasswordSchema.parse(data);
 
-    // TODO: Implement actual forgot password logic
-    // Example: await sendPasswordResetEmail(validated.email);
+    const payload: Record<string, unknown> = {
+      email: formData.email,
+    };
+
+    const response = await apiFetch("/auth/forgot-password/", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      requireAuth: false,
+    });
 
     return {
       success: true,
-      data: { email: validated.email },
+      data: response,
     };
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      const fieldErrors: Record<string, string[]> = {};
-      error.issues.forEach((issue) => {
-        const path = issue.path.join(".");
-        fieldErrors[path] ??= [];
-        fieldErrors[path].push(issue.message);
-      });
-
+    if (error && typeof error === "object") {
       return {
         success: false,
-        error: "Validation failed",
-        fieldErrors,
+        error:
+          (error as { non_field_errors: string[] }).non_field_errors?.[0] ||
+          "Email verification failed",
       };
     }
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Request failed",
+      error:
+        error instanceof Error ? error.message : "Email verification failed",
     };
   }
 }
 
 export async function resetPasswordAction(
-  data: ResetPasswordInput
-): Promise<ActionResult<{ success: boolean }>> {
+  data: ResetPasswordInput,
+  token: string
+) {
   try {
-    resetPasswordSchema.parse(data);
+    const formData = resetPasswordSchema.parse(data);
 
-    // TODO: Implement actual password reset logic
-    // Example: await updatePassword(validated);
+    const payload: Record<string, unknown> = {
+      password: formData.newPassword,
+      confirm_password: formData.confirmPassword,
+      token,
+    };
+
+    const response = await apiFetch("/auth/reset-password/", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      requireAuth: false,
+    });
 
     return {
       success: true,
-      data: { success: true },
+      data: response,
     };
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      const fieldErrors: Record<string, string[]> = {};
-      error.issues.forEach((issue) => {
-        const path = issue.path.join(".");
-        fieldErrors[path] ??= [];
-        fieldErrors[path].push(issue.message);
-      });
-
+    if (error && typeof error === "object") {
       return {
         success: false,
-        error: "Validation failed",
-        fieldErrors,
+        error:
+          (error as { non_field_errors: string[] }).non_field_errors?.[0] ||
+          "Password reset failed",
       };
     }
 
     return {
       success: false,
       error: error instanceof Error ? error.message : "Password reset failed",
+    };
+  }
+}
+
+export async function verifyEmailAction(token: string) {
+  try {
+    const response = await apiFetch(`/auth/verify-email?token=${token}`, {
+      method: "GET",
+      requireAuth: false,
+    });
+
+    return {
+      success: true,
+      data: response,
+    };
+  } catch (error) {
+    if (error && typeof error === "object") {
+      return {
+        success: false,
+        error:
+          (error as { non_field_errors: string[] }).non_field_errors?.[0] ||
+          "Email verification failed",
+      };
+    }
+
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Email verification failed",
     };
   }
 }

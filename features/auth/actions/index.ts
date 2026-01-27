@@ -3,4 +3,5 @@ export {
   loginAction,
   registerAction,
   resetPasswordAction,
+  verifyEmailAction,
 } from "./auth";

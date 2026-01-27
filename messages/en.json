@@ -1,16 +1,150 @@
 {
-  "HomePage": {
-    "title": "Hello World"
+  "header": {
+    "brand": "NextJS Starter",
+    "nav": {
+      "home": "Home",
+      "about": "About Us",
+      "contact": "Contact Us",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "cta": "Get Started",
+    "language": "Language"
+  },
+  "dashboard": {
+    "header": {
+      "title": "Dashboard",
+      "menu": "Menu"
+    },
+    "sidebar": {
+      "overview": "Overview",
+      "analytics": "Analytics",
+      "reports": "Reports",
+      "settings": "Settings",
+      "profile": "Profile"
+    },
+    "page": {
+      "welcome": "Welcome back",
+      "overview": "Overview",
+      "stats": {
+        "total_users": "Total Users",
+        "total_revenue": "Total Revenue",
+        "active_projects": "Active Projects",
+        "completed_tasks": "Completed Tasks"
+      },
+      "recent_activity": "Recent Activity",
+      "quick_actions": "Quick Actions"
+    }
+  },
+  "home_page": {
+    "title": "Build something extraordinary",
+    "subtitle": "A modern Next.js starter template designed for developers who value quality, security, and performance.",
+    "cta_primary": "Get Started",
+    "cta_secondary": "Learn More",
+    "features": {
+      "title": "Everything you need",
+      "subtitle": "Built with best practices and modern tools",
+      "security": {
+        "title": "Security First",
+        "description": "Environment validation, CORS, security headers, and XSS protection built-in."
+      },
+      "testing": {
+        "title": "Test Ready",
+        "description": "Vitest and React Testing Library configured for comprehensive test coverage."
+      },
+      "ui": {
+        "title": "Beautiful UI",
+        "description": "shadcn/ui components with Tailwind CSS for rapid, accessible development."
+      },
+      "docker": {
+        "title": "Docker Ready",
+        "description": "Development and production containers configured and ready to deploy."
+      },
+      "typescript": {
+        "title": "Type Safe",
+        "description": "Full TypeScript support with strict mode for maximum type safety."
+      },
+      "quality": {
+        "title": "Code Quality",
+        "description": "ESLint, Prettier, Husky, and Commitlint ensure consistent, high-quality code."
+      }
+    }
   },
   "common": {
     "welcome": "Welcome"
+  },
+  "footer": {
+    "copyright": "© {year} NextJS Starter. All rights reserved.",
+    "credit": "Designed & Developed by Abdul Halim"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Building the future of web development",
+    "mission": {
+      "title": "Our Mission",
+      "description": "We're dedicated to providing developers with the best tools and practices to build modern, secure, and performant web applications."
+    },
+    "values": {
+      "title": "Our Values",
+      "quality": {
+        "title": "Quality First",
+        "description": "We believe in writing clean, maintainable code that stands the test of time."
+      },
+      "security": {
+        "title": "Security Focused",
+        "description": "Security is not an afterthought. It's built into every aspect of our work."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We stay ahead of the curve, adopting the latest technologies and best practices."
+      }
+    }
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "form": {
+      "name": "Name",
+      "name_placeholder": "Your name",
+      "email": "Email",
+      "email_placeholder": "you@example.com",
+      "subject": "Subject",
+      "subject_placeholder": "What's this about?",
+      "message": "Message",
+      "message_placeholder": "Tell us more...",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success": "Message sent successfully! We'll get back to you soon."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "email_value": "hello@example.com",
+      "response": "Response Time",
+      "response_value": "Within 24 hours"
+    }
+  },
+  "NotFound": {
+    "title": "404",
+    "heading": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "back_home": "Back to Home"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "We encountered an unexpected error. Please try again or return to the home page.",
+    "try_again": "Try Again",
+    "back_home": "Back to Home",
+    "error_details": "Error details"
   },
   "auth": {
     "register": {
       "title": "Create an account",
       "description": "Enter your information to create your account",
       "fields": {
-        "name": "Name",
+        "firstName": "First Name",
+        "lastName": "Last Name",
         "name_placeholder": "John Doe",
         "email": "Email",
         "email_placeholder": "you@example.com",
@@ -80,6 +214,18 @@
         "description": "Your password has been successfully updated.",
         "login_link": "Sign in with new password"
       }
+    },
+    "verify_email": {
+      "title": "Verify your email",
+      "description": "We're verifying your email address",
+      "verifying": "Verifying your email...",
+      "success_title": "Email verified successfully",
+      "success_message": "Your email has been verified. You can now sign in to your account.",
+      "error_title": "Verification failed",
+      "verification_failed": "Email verification failed. Please try again or contact support.",
+      "no_token": "Invalid verification link. Please check your email and try again.",
+      "back_to_login": "Back to sign in",
+      "redirecting": "Redirecting to login page..."
     }
   }
 }

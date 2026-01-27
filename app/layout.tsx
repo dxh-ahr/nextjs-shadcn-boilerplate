@@ -1,10 +1,11 @@
-import { LocaleSwitcher } from "@/components/locale-switcher";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ThemeProvider } from "@/providers/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider, ThemeProvider } from "@/providers";
+import { Loader2 } from "lucide-react";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { defaultMetadata } from "./metadata";
 
@@ -21,22 +22,33 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className={`${inter.variable} antialiased`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="fixed top-4 right-4 flex items-center gap-4 z-50">
-              <LocaleSwitcher />
-              <ThemeSwitcher />
-            </div>
-            {children}
-          </ThemeProvider>
-        </NextIntlClientProvider>
+    <html lang={locale} suppressHydrationWarning>
+      <body
+        className={`${inter.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <QueryProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Suspense
+                fallback={
+                  <section className="grid h-screen w-screen place-content-center">
+                    <Loader2 className="size-12 animate-spin text-primary" />
+                    <span className="sr-only">Loading...</span>
+                  </section>
+                }
+              >
+                <main className="pt-16">{children}</main>
+              </Suspense>
+              <Toaster position="top-center" richColors />
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </QueryProvider>
       </body>
     </html>
   );
