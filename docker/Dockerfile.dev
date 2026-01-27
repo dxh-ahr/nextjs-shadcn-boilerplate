@@ -12,7 +12,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY pnpm-workspace.yaml* ./
 
 # Copy entrypoint script
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 # Expose port

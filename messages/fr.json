@@ -4,5 +4,82 @@
   },
   "common": {
     "welcome": "Bienvenue"
+  },
+  "auth": {
+    "register": {
+      "title": "Créer un compte",
+      "description": "Entrez vos informations pour créer votre compte",
+      "fields": {
+        "name": "Nom",
+        "name_placeholder": "Jean Dupont",
+        "email": "Email",
+        "email_placeholder": "vous@exemple.com",
+        "password": "Mot de passe",
+        "password_placeholder": "Entrez votre mot de passe",
+        "confirm_password": "Confirmer le mot de passe",
+        "confirm_password_placeholder": "Confirmez votre mot de passe"
+      },
+      "submit": "Créer un compte",
+      "submitting": "Création du compte...",
+      "already_have_account": "Vous avez déjà un compte ?",
+      "login_link": "Se connecter",
+      "success": {
+        "title": "Compte créé avec succès",
+        "description": "Votre compte a été créé. Vous pouvez maintenant vous connecter.",
+        "login_link": "Aller à la connexion"
+      }
+    },
+    "login": {
+      "title": "Se connecter",
+      "description": "Entrez vos identifiants pour accéder à votre compte",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "vous@exemple.com",
+        "password": "Mot de passe",
+        "password_placeholder": "Entrez votre mot de passe"
+      },
+      "submit": "Se connecter",
+      "submitting": "Connexion...",
+      "remember_me": "Se souvenir de moi",
+      "forgot_password": "Mot de passe oublié ?",
+      "dont_have_account": "Vous n'avez pas de compte ?",
+      "register_link": "S'inscrire"
+    },
+    "forgot_password": {
+      "title": "Réinitialiser votre mot de passe",
+      "description": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "vous@exemple.com"
+      },
+      "submit": "Envoyer le lien de réinitialisation",
+      "submitting": "Envoi...",
+      "back_to_login": "Retour à la connexion",
+      "success": {
+        "title": "Vérifiez votre email",
+        "description": "Nous avons envoyé un lien de réinitialisation de mot de passe à votre adresse email.",
+        "login_link": "Retour à la connexion"
+      }
+    },
+    "reset_password": {
+      "title": "Changer votre mot de passe",
+      "description": "Entrez votre mot de passe actuel et choisissez-en un nouveau",
+      "fields": {
+        "old_password": "Mot de passe actuel",
+        "old_password_placeholder": "Entrez votre mot de passe actuel",
+        "new_password": "Nouveau mot de passe",
+        "new_password_placeholder": "Entrez votre nouveau mot de passe",
+        "confirm_password": "Confirmer le nouveau mot de passe",
+        "confirm_password_placeholder": "Confirmez votre nouveau mot de passe"
+      },
+      "submit": "Mettre à jour le mot de passe",
+      "submitting": "Mise à jour...",
+      "back_to_login": "Retour à la connexion",
+      "success": {
+        "title": "Mot de passe mis à jour",
+        "description": "Votre mot de passe a été mis à jour avec succès.",
+        "login_link": "Se connecter avec le nouveau mot de passe"
+      }
+    }
   }
 }

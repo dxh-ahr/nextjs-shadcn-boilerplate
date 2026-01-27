@@ -4,5 +4,82 @@
   },
   "common": {
     "welcome": "Welcome"
+  },
+  "auth": {
+    "register": {
+      "title": "Create an account",
+      "description": "Enter your information to create your account",
+      "fields": {
+        "name": "Name",
+        "name_placeholder": "John Doe",
+        "email": "Email",
+        "email_placeholder": "you@example.com",
+        "password": "Password",
+        "password_placeholder": "Enter your password",
+        "confirm_password": "Confirm Password",
+        "confirm_password_placeholder": "Confirm your password"
+      },
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "already_have_account": "Already have an account?",
+      "login_link": "Sign in",
+      "success": {
+        "title": "Account created successfully",
+        "description": "Your account has been created. You can now sign in.",
+        "login_link": "Go to sign in"
+      }
+    },
+    "login": {
+      "title": "Sign in",
+      "description": "Enter your credentials to access your account",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "you@example.com",
+        "password": "Password",
+        "password_placeholder": "Enter your password"
+      },
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "remember_me": "Remember me",
+      "forgot_password": "Forgot password?",
+      "dont_have_account": "Don't have an account?",
+      "register_link": "Sign up"
+    },
+    "forgot_password": {
+      "title": "Reset your password",
+      "description": "Enter your email address and we'll send you a link to reset your password",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "you@example.com"
+      },
+      "submit": "Send reset link",
+      "submitting": "Sending...",
+      "back_to_login": "Back to sign in",
+      "success": {
+        "title": "Check your email",
+        "description": "We've sent a password reset link to your email address.",
+        "login_link": "Back to sign in"
+      }
+    },
+    "reset_password": {
+      "title": "Change your password",
+      "description": "Enter your current password and choose a new one",
+      "fields": {
+        "old_password": "Current Password",
+        "old_password_placeholder": "Enter your current password",
+        "new_password": "New Password",
+        "new_password_placeholder": "Enter your new password",
+        "confirm_password": "Confirm New Password",
+        "confirm_password_placeholder": "Confirm your new password"
+      },
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "back_to_login": "Back to sign in",
+      "success": {
+        "title": "Password updated",
+        "description": "Your password has been successfully updated.",
+        "login_link": "Sign in with new password"
+      }
+    }
   }
 }

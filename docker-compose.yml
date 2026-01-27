@@ -5,7 +5,7 @@ services:
   dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: ./docker/Dockerfile.dev
     container_name: nextjs-starter-dev
     ports:
       - "3000:3000"
@@ -30,7 +30,7 @@ services:
   nextjs:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
     container_name: nextjs-starter
     ports:
       - "3000:3000"
