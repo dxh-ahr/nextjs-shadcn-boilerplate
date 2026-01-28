@@ -31,16 +31,13 @@ export function LoginForm() {
   const onSubmit = async (data: LoginInput) => {
     const response = await loginAction(data);
 
-    if (!response.success || "error" in response) {
-      toast.error(
-        (response as { error: string }).error || "Invalid email or password"
-      );
+    if (response.status !== "success") {
+      toast.error(response.message || "Login failed");
       return;
     }
 
     router.push("/dashboard");
     toast.success("Login successful");
-    localStorage.setItem("dxh_key", response.data?.key);
   };
 
   const isSubmitting = form.formState.isSubmitting;

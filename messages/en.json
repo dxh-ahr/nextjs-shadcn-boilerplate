@@ -223,9 +223,41 @@
       "success_message": "Your email has been verified. You can now sign in to your account.",
       "error_title": "Verification failed",
       "verification_failed": "Email verification failed. Please try again or contact support.",
-      "no_token": "Invalid verification link. Please check your email and try again.",
-      "back_to_login": "Back to sign in",
+      "no_code_or_email": "Invalid verification link. Please check your email and try again.",
+      "resend_verification_email": "Resend verification email",
       "redirecting": "Redirecting to login page..."
+    },
+    "resend_verification_email": {
+      "title": "Resend verification email",
+      "description": "Enter your email address and we’ll send you a new verification email.",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "you@example.com"
+      },
+      "submit": "Send verification email",
+      "submitting": "Sending...",
+      "cooldown_label": "Resend in {time}",
+      "success_toast": "Verification email sent. Please check your inbox.",
+      "error_generic": "Could not send verification email. Please try again."
+    },
+    "verify_email_otp": {
+      "title": "Enter verification code",
+      "description": "We have sent a 6-digit verification code to your email. Enter it below to verify your email address.",
+      "fields": {
+        "email": "Email",
+        "email_placeholder": "you@example.com",
+        "code": "Verification code",
+        "code_placeholder": "Enter 6-digit code",
+        "code_min": "Code must be 6 digits",
+        "code_max": "Code must be 6 digits",
+        "code_invalid": "Code is invalid",
+        "email_invalid": "Please enter a valid email address"
+      },
+      "submit": "Verify email",
+      "submitting": "Verifying...",
+      "success_message": "Your email has been verified. You can now sign in to your account.",
+      "error_message": "Verification failed. Please check the code and try again.",
+      "back_to_login": "Back to sign in"
     }
   }
 }

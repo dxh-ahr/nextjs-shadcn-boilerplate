@@ -57,3 +57,13 @@ README.md
 # CI/CD
 .github
 .gitlab-ci.yml
+
+# Ignore everything in the infra folder
+infra/
+
+# Ignore static files if already built (optional)
+static
+public/uploads
+
+# Makefile
+Makefile

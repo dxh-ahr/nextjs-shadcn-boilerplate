@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { resetPasswordAction } from "../../actions";
 
-export function ResetPasswordForm() {
+export function NewPasswordForm() {
   const t = useTranslations("auth.reset_password");
 
   const router = useRouter();
@@ -39,15 +39,13 @@ export function ResetPasswordForm() {
   const onSubmit = async (data: ResetPasswordInput) => {
     const response = await resetPasswordAction(data, token);
 
-    if (!response.success || "error" in response) {
-      toast.error(
-        (response as { error: string }).error || "Reset password failed"
-      );
+    if (response.status !== "success") {
+      toast.error(response.message || "Reset password failed");
       return;
     }
 
     router.push("/auth/login");
-    toast.success("Password reset successful");
+    toast.success(response.message || "Password reset successful");
   };
 
   const isSubmitting = form.formState.isSubmitting;

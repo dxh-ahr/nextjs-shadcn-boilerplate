@@ -34,6 +34,7 @@ export const env = createEnv({
       .string()
       .default("false")
       .transform((val) => val === "true"),
+    API_URL: urlSchema,
   },
 
   client: {
@@ -46,6 +47,7 @@ export const env = createEnv({
     NODE_ENV: process.env["NODE_ENV"],
     ENABLE_ANALYTICS: process.env["ENABLE_ANALYTICS"],
     BUILD_STANDALONE: process.env["BUILD_STANDALONE"],
+    API_URL: process.env["API_URL"],
     NEXT_PUBLIC_APP_NAME: process.env["NEXT_PUBLIC_APP_NAME"],
     NEXT_PUBLIC_APP_URL: process.env["NEXT_PUBLIC_APP_URL"],
     NEXT_PUBLIC_API_URL: process.env["NEXT_PUBLIC_API_URL"],

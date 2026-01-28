@@ -124,7 +124,7 @@
     @apply bg-background text-foreground;
 
     .auth-card {
-      @apply w-full max-w-md max-h-[calc(100vh-80px)] overflow-y-auto!;
+      @apply w-full max-w-md max-h-[calc(100vh-80px)] overflow-y-auto! border border-gray-100 dark:border-gray-900;
     }
   }
 }

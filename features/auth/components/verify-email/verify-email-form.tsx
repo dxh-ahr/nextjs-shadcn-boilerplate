@@ -5,52 +5,87 @@ import { verifyEmailAction } from "@/features/auth/actions";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export function VerifyEmailForm() {
   const t = useTranslations("auth.verify_email");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const code = searchParams.get("code");
+  const email = searchParams.get("email");
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const hasVerifiedRef = useRef(false);
+  const isVerifyingRef = useRef(false);
 
   useEffect(() => {
+    // Prevent multiple calls
+    if (hasVerifiedRef.current || isVerifyingRef.current) {
+      return;
+    }
+
+    if (!code || !email) {
+      setStatus("error");
+      setErrorMessage(t("no_code_or_email"));
+      toast.error(t("no_code_or_email"));
+      return;
+    }
+
     const verifyEmail = async () => {
-      if (!token) {
-        toast.error(t("no_token"));
-        return;
-      }
+      isVerifyingRef.current = true;
 
-      const response = await verifyEmailAction(token);
+      try {
+        const response = await verifyEmailAction(code, email);
 
-      if (!response.success || "error" in response) {
+        // Prevent state updates if component unmounted or already verified
+        if (hasVerifiedRef.current) {
+          return;
+        }
+
+        if (response.status !== "success") {
+          setStatus("error");
+          const message = response.message || t("verification_failed");
+          setErrorMessage(message);
+          toast.error(message);
+          hasVerifiedRef.current = true;
+          return;
+        }
+
+        setStatus("success");
+        setErrorMessage("");
+        hasVerifiedRef.current = true;
+        toast.success(response.message || t("success_message"));
+
+        // Navigate after a short delay to show success message
+        setTimeout(() => {
+          router.push("/auth/login");
+        }, 1500);
+      } catch (error) {
+        if (hasVerifiedRef.current) {
+          return;
+        }
         setStatus("error");
-        setErrorMessage(
-          (response as { error: string }).error || t("verification_failed")
-        );
-        toast.error(
-          (response as { error: string }).error || t("verification_failed")
-        );
+        const message =
+          error instanceof Error ? error.message : t("verification_failed");
+        setErrorMessage(message);
+        toast.error(message);
+        hasVerifiedRef.current = true;
+      } finally {
+        isVerifyingRef.current = false;
       }
-
-      setStatus("success");
-      setErrorMessage("");
-      router.push("/auth/login");
-      toast.success(t("success_message"));
     };
 
     verifyEmail();
-  }, [token, router, t]);
+  }, [code, email, router, t]);
 
   if (status === "loading") {
     return (
-      <div className="flex flex-col items-center justify-center space-y-4 py-8">
+      <div className="flex flex-col items-center justify-center space-y-4 py-5">
         <Loader2 className="size-8 animate-spin text-primary" />
         <p className="text-sm text-muted-foreground">{t("verifying")}</p>
       </div>
@@ -59,7 +94,7 @@ export function VerifyEmailForm() {
 
   if (status === "error") {
     return (
-      <div className="flex flex-col items-center justify-center space-y-4 py-8">
+      <div className="flex flex-col items-center justify-center space-y-4 py-5">
         <div className="rounded-full bg-destructive/10 p-3">
           <XCircle className="size-8 text-destructive" />
         </div>
@@ -68,17 +103,19 @@ export function VerifyEmailForm() {
           <p className="text-sm text-muted-foreground">{errorMessage}</p>
         </div>
         <Button
-          onClick={() => router.push("/auth/login")}
           className="w-full sm:w-auto"
+          onClick={() =>
+            router.push(`/auth/resend-verification-email?email=${email}`)
+          }
         >
-          {t("back_to_login")}
+          {t("resend_verification_email")}
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-4 py-8">
+    <div className="flex flex-col items-center justify-center space-y-4 py-5">
       <div className="rounded-full bg-primary/10 p-3">
         <CheckCircle2 className="size-8 text-primary" />
       </div>

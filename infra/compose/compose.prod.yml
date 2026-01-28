@@ -1,0 +1,70 @@
+services:
+  web:
+    container_name: dxh_web
+    image: caddy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./static:/var/www/static
+      - ./media:/var/www/media
+    depends_on:
+      - app
+    networks:
+      - dxh
+    restart: unless-stopped
+
+  app:
+    container_name: dxh_app
+    image: "dxhltd/devxhub-api:${IMAGE_TAG}"
+    environment:
+      - UID=${UID}
+      - GID=${GID}
+    env_file:
+      - .env
+    volumes:
+      - ./static:/app/static
+      - ./media:/app/media
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - dxh
+    restart: on-failure
+
+  db:
+    container_name: dxh_db
+    image: postgres:17
+    env_file:
+      - .env # Make sure this .env has DB_NAME, DB_USER, DB_PASSWORD
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - dxh
+    restart: unless-stopped
+
+networks:
+  dxh:
+    driver: bridge
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:

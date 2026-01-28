@@ -1,0 +1,107 @@
+services:
+  web:
+    image: caddy:latest
+    ports:
+      - "${FORWARD_NEXTJS_PORT:-3000}:3000"
+      - "${FORWARD_API_PORT:-8000}:8000"
+    volumes:
+      - ../caddy/Caddyfile.local:/etc/caddy/Caddyfile
+      - static_data:/var/www/staticfiles
+      - media_data:/var/www/media
+    depends_on:
+      - nextjs
+      - django
+    networks:
+      - devxhub
+    restart: unless-stopped
+
+  nextjs:
+    image: dxhltd/nextjs-shadcn-boilerplate:${DOCKER_IMAGE_TAG:-local}
+    networks:
+      - devxhub
+    restart: on-failure
+
+  django:
+    image: dxhltd/django-admin-boilerplate:${DOCKER_IMAGE_TAG:-local}
+    platform: linux/amd64
+    volumes:
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_healthy
+        restart: true
+    networks:
+      - devxhub
+    restart: on-failure
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - devxhub
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-support@devxhub.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-ILovedevxhubLimited}
+      - PGADMIN_CONFIG_SERVER_MODE=${PGADMIN_CONFIG_SERVER_MODE:-True}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ../pgadmin/servers.json:/pgadmin4/servers.json
+    ports:
+      - "${FORWARD_PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - postgres
+    networks:
+      - devxhub
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - redis_data:/data
+    networks:
+      - devxhub
+    restart: unless-stopped
+
+  mailpit:
+    image: "axllent/mailpit:latest"
+    ports:
+      - "${FORWARD_MAILPIT_PORT:-8025}:8025"
+    networks:
+      - devxhub
+    restart: unless-stopped
+
+networks:
+  devxhub:
+    driver: bridge
+
+volumes:
+  static_data:
+  media_data:
+  postgres_data:
+  pgadmin_data:
+  redis_data:
