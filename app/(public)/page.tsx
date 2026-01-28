@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useMemo } from "react";
 
 const features = [
   {
@@ -52,10 +51,6 @@ const features = [
 export default function Page() {
   const t = useTranslations("home_page");
 
-  const isAuthenticated = useMemo(() => {
-    return !!localStorage.getItem("dxh_key");
-  }, []);
-
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -79,29 +74,17 @@ export default function Page() {
             className="flex flex-col items-center justify-center gap-4 sm:flex-row"
             style={{ animationDelay: "200ms" }}
           >
-            {isAuthenticated ? (
-              <Button
-                asChild
-                size="lg"
-                className="group min-w-[160px] animate-fade-in-up"
-              >
-                <Link href="/dashboard">
-                  {t("cta_primary")}
-                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                size="lg"
-                className="group min-w-[160px] animate-fade-in-up"
-              >
-                <Link href="/auth/register">
-                  {t("cta_primary")}
-                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-            )}
+            <Button
+              asChild
+              size="lg"
+              className="group min-w-[160px] animate-fade-in-up"
+            >
+              <Link href="/auth/register">
+                {t("cta_primary")}
+                <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+
             <Button
               asChild
               variant="outline"
