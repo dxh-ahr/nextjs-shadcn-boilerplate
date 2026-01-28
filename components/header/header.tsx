@@ -50,10 +50,8 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm"
-          : "bg-transparent"
+        "bg-gray-50! dark:bg-gray-900! fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-border/50",
+        isScrolled ? "backdrop-blur-md shadow-sm" : ""
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -9,12 +9,15 @@ import {
 } from "@/features/auth/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { forgotPasswordAction } from "../../actions";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth.forgot_password");
+
+  const router = useRouter();
 
   const form = useForm<ForgotPasswordInput>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -27,14 +30,15 @@ export function ForgotPasswordForm() {
   const onSubmit = async (data: ForgotPasswordInput) => {
     const response = await forgotPasswordAction(data);
 
-    if (!response.success || "error" in response) {
-      toast.error(
-        (response as { error: string }).error || "Invalid email address"
-      );
+    if (response.status !== "success") {
+      toast.error(response.message || "Invalid email address");
       return;
     }
 
-    toast.success("Password reset link sent to your email address");
+    router.push("/auth/login");
+    toast.success(
+      response.message || "Password reset link sent to your email address"
+    );
   };
 
   const isSubmitting = form.formState.isSubmitting;

@@ -1,0 +1,40 @@
+:80 {
+    encode gzip
+
+     @wp {
+		  header Connection *Upgrade*
+		  header Upgrade    websocket
+	  }
+
+	  reverse_proxy @wp django:8001 {
+        header_up Host localhost
+      }
+    # Proxy all requests to the Django backend
+    reverse_proxy django:8000 {
+        header_up Host localhost
+    }
+
+    # Serve static files
+    handle_path /static/* {
+        root * /var/www/staticfiles
+        file_server
+    }
+
+    # Serve media files
+    handle_path /media/* {
+        root * /var/www/media
+        file_server
+    }
+
+    # Security headers (basic for development, can be expanded for production)
+    header {
+        -Server
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    }
+
+    # Log requests
+    log {
+        output stdout
+        format console
+    }
+}

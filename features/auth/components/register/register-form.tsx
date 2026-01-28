@@ -19,22 +19,6 @@ export function RegisterForm() {
 
   const router = useRouter();
 
-  // first_name: formData.firstName,
-  // last_name: formData.lastName,
-  // email: formData.email,
-  // password1: formData.password,
-  // password2: formData.confirmPassword,
-
-  // phone: formData.phone,
-  // company_title: formData.companyTitle,
-  // company_type: formData.companyType,
-  // is_owner: true,
-  // is_editor: false,
-  // is_staff: true,
-  // language: formData.language,
-  // currency: formData.currency,
-  // plan: localStorage.getItem("planId"),
-
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     mode: "onSubmit",
@@ -50,10 +34,8 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterInput) => {
     const response = await registerAction(data);
 
-    if (!response.success || "error" in response) {
-      toast.error(
-        (response as { error: string }).error || "Registration failed"
-      );
+    if (response.status !== "success") {
+      toast.error(response.message || "Registration failed");
       return;
     }
 

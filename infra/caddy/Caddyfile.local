@@ -1,0 +1,30 @@
+:8000 {
+  encode gzip
+
+  @wp {
+		  header Connection *Upgrade*
+		  header Upgrade    websocket
+	}
+
+  # Proxy requests to the backend
+  reverse_proxy django:8000
+
+  # Serve static files
+  handle_path /static/* {
+      root * /var/www/staticfiles
+      file_server
+  }
+
+  # Serve media files
+  handle_path /media/* {
+      root * /var/www/media
+      file_server
+  }
+}
+
+:3000 {
+  encode gzip
+
+  # Proxy requests to the frontend
+  reverse_proxy nextjs:3000
+}
