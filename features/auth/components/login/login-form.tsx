@@ -9,13 +9,14 @@ import { loginSchema, type LoginInput } from "@/features/auth/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const t = useTranslations("auth.login");
 
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -28,39 +29,25 @@ export function LoginForm() {
   });
 
   const onSubmit = async (data: LoginInput) => {
-    setError(null);
+    const response = await loginAction(data);
 
-    const result = await loginAction(data);
-
-    console.log(result);
-
-    if (result.success) {
-      form.reset();
-    } else {
-      setError(result.error);
-      if (result.fieldErrors) {
-        Object.entries(result.fieldErrors).forEach(([field, messages]) => {
-          const message = messages[0];
-          if (message) {
-            form.setError(field as keyof LoginInput, {
-              type: "server",
-              message,
-            });
-          }
-        });
-      }
+    if (!response.success || "error" in response) {
+      toast.error(
+        (response as { error: string }).error || "Invalid email or password"
+      );
+      return;
     }
+
+    router.push("/dashboard");
+    toast.success("Login successful");
+    localStorage.setItem("dxh_key", response.data?.key);
   };
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form form={form} onSubmit={onSubmit}>
       <div className="space-y-4">
-        {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
-
         <FormField name="email" label={t("fields.email")}>
           {(field) => (
             <Input
@@ -113,8 +100,8 @@ export function LoginForm() {
           </Link>
         </div>
 
-        <Button type="submit" className="w-full" disabled={false}>
-          {false ? t("submitting") : t("submit")}
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? t("submitting") : t("submit")}
         </Button>
       </div>
     </Form>

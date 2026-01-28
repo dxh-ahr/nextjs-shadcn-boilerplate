@@ -1,16 +1,150 @@
 {
-  "HomePage": {
-    "title": "Bonjour le monde"
+  "header": {
+    "brand": "NextJS Starter",
+    "nav": {
+      "home": "Accueil",
+      "about": "À propos de nous",
+      "contact": "Contactez-nous",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
+    },
+    "cta": "Commencer",
+    "language": "Langue"
+  },
+  "dashboard": {
+    "header": {
+      "title": "Tableau de bord",
+      "menu": "Menu"
+    },
+    "sidebar": {
+      "overview": "Vue d'ensemble",
+      "analytics": "Analytique",
+      "reports": "Rapports",
+      "settings": "Paramètres",
+      "profile": "Profil"
+    },
+    "page": {
+      "welcome": "Bon retour",
+      "overview": "Vue d'ensemble",
+      "stats": {
+        "total_users": "Total des utilisateurs",
+        "total_revenue": "Revenu total",
+        "active_projects": "Projets actifs",
+        "completed_tasks": "Tâches terminées"
+      },
+      "recent_activity": "Activité récente",
+      "quick_actions": "Actions rapides"
+    }
+  },
+  "home_page": {
+    "title": "Construisez quelque chose d'extraordinaire",
+    "subtitle": "Un modèle de démarrage Next.js moderne conçu pour les développeurs qui valorisent la qualité, la sécurité et les performances.",
+    "cta_primary": "Commencer",
+    "cta_secondary": "En savoir plus",
+    "features": {
+      "title": "Tout ce dont vous avez besoin",
+      "subtitle": "Construit avec les meilleures pratiques et outils modernes",
+      "security": {
+        "title": "Sécurité d'abord",
+        "description": "Validation de l'environnement, CORS, en-têtes de sécurité et protection XSS intégrés."
+      },
+      "testing": {
+        "title": "Prêt pour les tests",
+        "description": "Vitest et React Testing Library configurés pour une couverture de test complète."
+      },
+      "ui": {
+        "title": "Interface élégante",
+        "description": "Composants shadcn/ui avec Tailwind CSS pour un développement rapide et accessible."
+      },
+      "docker": {
+        "title": "Prêt pour Docker",
+        "description": "Conteneurs de développement et de production configurés et prêts à déployer."
+      },
+      "typescript": {
+        "title": "Type Safe",
+        "description": "Support complet de TypeScript avec mode strict pour une sécurité de type maximale."
+      },
+      "quality": {
+        "title": "Qualité du code",
+        "description": "ESLint, Prettier, Husky et Commitlint garantissent un code cohérent et de haute qualité."
+      }
+    }
   },
   "common": {
     "welcome": "Bienvenue"
+  },
+  "footer": {
+    "copyright": "© {year} NextJS Starter. Tous droits réservés.",
+    "credit": "Conçu et développé par Abdul Halim"
+  },
+  "about": {
+    "title": "À propos de nous",
+    "subtitle": "Construire l'avenir du développement web",
+    "mission": {
+      "title": "Notre mission",
+      "description": "Nous nous consacrons à fournir aux développeurs les meilleurs outils et pratiques pour créer des applications web modernes, sécurisées et performantes."
+    },
+    "values": {
+      "title": "Nos valeurs",
+      "quality": {
+        "title": "Qualité d'abord",
+        "description": "Nous croyons en l'écriture de code propre et maintenable qui résiste à l'épreuve du temps."
+      },
+      "security": {
+        "title": "Axé sur la sécurité",
+        "description": "La sécurité n'est pas une réflexion après coup. Elle est intégrée dans tous les aspects de notre travail."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Nous restons en avance sur la courbe, en adoptant les dernières technologies et les meilleures pratiques."
+      }
+    }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous serions ravis d'avoir de vos nouvelles. Envoyez-nous un message et nous répondrons dès que possible.",
+    "form": {
+      "name": "Nom",
+      "name_placeholder": "Votre nom",
+      "email": "Email",
+      "email_placeholder": "vous@exemple.com",
+      "subject": "Sujet",
+      "subject_placeholder": "De quoi s'agit-il ?",
+      "message": "Message",
+      "message_placeholder": "Dites-nous en plus...",
+      "submit": "Envoyer le message",
+      "submitting": "Envoi...",
+      "success": "Message envoyé avec succès ! Nous vous répondrons bientôt."
+    },
+    "info": {
+      "title": "Informations de contact",
+      "email": "Email",
+      "email_value": "hello@exemple.com",
+      "response": "Temps de réponse",
+      "response_value": "Sous 24 heures"
+    }
+  },
+  "NotFound": {
+    "title": "404",
+    "heading": "Page non trouvée",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "back_home": "Retour à l'accueil"
+  },
+  "Error": {
+    "title": "Quelque chose s'est mal passé",
+    "description": "Nous avons rencontré une erreur inattendue. Veuillez réessayer ou retourner à la page d'accueil.",
+    "try_again": "Réessayer",
+    "back_home": "Retour à l'accueil",
+    "error_details": "Détails de l'erreur"
   },
   "auth": {
     "register": {
       "title": "Créer un compte",
       "description": "Entrez vos informations pour créer votre compte",
       "fields": {
-        "name": "Nom",
+        "firstName": "Prénom",
+        "lastName": "Nom",
         "name_placeholder": "Jean Dupont",
         "email": "Email",
         "email_placeholder": "vous@exemple.com",
@@ -80,6 +214,18 @@
         "description": "Votre mot de passe a été mis à jour avec succès.",
         "login_link": "Se connecter avec le nouveau mot de passe"
       }
+    },
+    "verify_email": {
+      "title": "Vérifier votre email",
+      "description": "Nous vérifions votre adresse email",
+      "verifying": "Vérification de votre email...",
+      "success_title": "Email vérifié avec succès",
+      "success_message": "Votre email a été vérifié. Vous pouvez maintenant vous connecter à votre compte.",
+      "error_title": "Échec de la vérification",
+      "verification_failed": "La vérification de l'email a échoué. Veuillez réessayer ou contacter le support.",
+      "no_token": "Lien de vérification invalide. Veuillez vérifier votre email et réessayer.",
+      "back_to_login": "Retour à la connexion",
+      "redirecting": "Redirection vers la page de connexion..."
     }
   }
 }

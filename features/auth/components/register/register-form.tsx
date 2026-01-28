@@ -3,28 +3,44 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerAction } from "@/features/auth/actions";
 import {
   registerSchema,
   type RegisterInput,
 } from "@/features/auth/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { registerAction } from "../../actions";
 
 export function RegisterForm() {
   const t = useTranslations("auth.register");
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+
+  const router = useRouter();
+
+  // first_name: formData.firstName,
+  // last_name: formData.lastName,
+  // email: formData.email,
+  // password1: formData.password,
+  // password2: formData.confirmPassword,
+
+  // phone: formData.phone,
+  // company_title: formData.companyTitle,
+  // company_type: formData.companyType,
+  // is_owner: true,
+  // is_editor: false,
+  // is_staff: true,
+  // language: formData.language,
+  // currency: formData.currency,
+  // plan: localStorage.getItem("planId"),
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     mode: "onSubmit",
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -32,65 +48,46 @@ export function RegisterForm() {
   });
 
   const onSubmit = async (data: RegisterInput) => {
-    setError(null);
-    setSuccess(false);
+    const response = await registerAction(data);
 
-    startTransition(async () => {
-      const result = await registerAction(data);
+    if (!response.success || "error" in response) {
+      toast.error(
+        (response as { error: string }).error || "Registration failed"
+      );
+      return;
+    }
 
-      if (result.success) {
-        setSuccess(true);
-        form.reset();
-      } else {
-        setError(result.error);
-        if (result.fieldErrors) {
-          Object.entries(result.fieldErrors).forEach(([field, messages]) => {
-            const message = messages[0];
-            if (message) {
-              form.setError(field as keyof RegisterInput, {
-                type: "server",
-                message,
-              });
-            }
-          });
-        }
-      }
-    });
+    router.push("/auth/login");
+    toast.success("User registered successfully, please verify your email.");
   };
 
-  if (success) {
-    return (
-      <div className="space-y-4">
-        <div className="rounded-md bg-green-500/10 p-3 text-sm text-green-600 dark:text-green-400">
-          <div className="font-semibold mb-1">{t("success.title")}</div>
-          <div>{t("success.description")}</div>
-        </div>
-        <Button asChild className="w-full">
-          <Link href="/auth/login">{t("success.login_link")}</Link>
-        </Button>
-      </div>
-    );
-  }
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form form={form} onSubmit={onSubmit}>
       <div className="space-y-4">
-        {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
-
-        <FormField name="name" label={t("fields.name")}>
-          {(field) => (
-            <Input
-              id={field.name}
-              type="text"
-              placeholder={t("fields.name_placeholder")}
-              {...field}
-            />
-          )}
-        </FormField>
+        <div className="flex justify-between flex-col sm:flex-row gap-3">
+          <FormField name="firstName" label={t("fields.firstName")}>
+            {(field) => (
+              <Input
+                id={field.name}
+                type="text"
+                placeholder={t("fields.name_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
+          <FormField name="lastName" label={t("fields.lastName")}>
+            {(field) => (
+              <Input
+                id={field.name}
+                type="text"
+                placeholder={t("fields.name_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
+        </div>
 
         <FormField name="email" label={t("fields.email")}>
           {(field) => (
@@ -125,8 +122,8 @@ export function RegisterForm() {
           )}
         </FormField>
 
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? t("submitting") : t("submit")}
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? t("submitting") : t("submit")}
         </Button>
       </div>
     </Form>
