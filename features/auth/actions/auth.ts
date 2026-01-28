@@ -11,7 +11,7 @@ import {
   type ResetPasswordInput,
 } from "@/features/auth/validations/auth";
 import { apiFetch, type ApiError } from "@/lib/api";
-import { setAuthToken } from "@/lib/api/fetch";
+import { getRefreshToken, setAuthToken } from "@/lib/api/fetch";
 import type { ApiResponse, LoginResponse, UserProfile } from "./type";
 
 export async function registerAction(data: RegisterInput) {
@@ -151,6 +151,22 @@ export async function resendVerificationEmailAction(email: string) {
         requireAuth: false,
       }
     );
+
+    return response;
+  } catch (error) {
+    return error as ApiError;
+  }
+}
+
+export async function logoutAction() {
+  const refreshToken = await getRefreshToken();
+
+  try {
+    const response = await apiFetch<ApiResponse<null>>("/api/auth/v1/logout/", {
+      method: "POST",
+      body: JSON.stringify({ refresh_token: refreshToken }),
+      requireAuth: true,
+    });
 
     return response;
   } catch (error) {

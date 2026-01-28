@@ -28,10 +28,17 @@ const refreshTokenCookieOptions = {
   maxAge: 7 * 24 * 60 * 60, // 7 days
 };
 
-async function getAuthToken(token?: string): Promise<string | null> {
+export async function getAuthToken(
+  token?: string | null | undefined
+): Promise<string | null> {
   if (token) return token;
   const cookieStore = await cookies();
   return cookieStore.get("dxh_access_token")?.value || null;
+}
+
+export async function getRefreshToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get("dxh_refresh_token")?.value || null;
 }
 
 export async function setAuthToken(token: string): Promise<void> {
@@ -55,7 +62,7 @@ async function buildHeaders(options: FetchOptions = {}): Promise<HeadersInit> {
   }
 
   if (options.requireAuth !== false) {
-    const token = await getAuthToken(options.token);
+    const token = await getAuthToken();
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }

@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   DashboardHeader,
   DashboardSidebar,
 } from "@/components/dashboard-header";
-import { useState } from "react";
 
 export default function DashboardLayout({
   children,
