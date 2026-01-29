@@ -6,6 +6,7 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginAction } from "@/features/auth/actions";
 import { loginSchema, type LoginInput } from "@/features/auth/validations";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -36,7 +37,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(ROUTES.DASHBOARD.ROOT);
     toast.success("Login successful");
   };
 
@@ -90,7 +91,7 @@ export function LoginForm() {
             )}
           </FormField>
           <Link
-            href="/auth/forgot-password"
+            href={ROUTES.AUTH.FORGOT_PASSWORD}
             className="text-sm text-primary hover:underline base-1/2"
           >
             {t("forgot_password")}

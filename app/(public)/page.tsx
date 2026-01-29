@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ROUTES, TIME_MS } from "@/lib/constants";
 import {
   ArrowRight,
   CheckCircle2,
@@ -64,7 +65,7 @@ export default function Page() {
           {/* Subtitle */}
           <p
             className="mx-auto mb-12 max-w-2xl animate-fade-in-up text-lg font-light leading-relaxed text-muted-foreground sm:text-xl"
-            style={{ animationDelay: "100ms" }}
+            style={{ animationDelay: `${TIME_MS.ANIMATION_DELAY_SUBTITLE}ms` }}
           >
             {t("subtitle")}
           </p>
@@ -72,14 +73,14 @@ export default function Page() {
           {/* CTA Buttons */}
           <div
             className="flex flex-col items-center justify-center gap-4 sm:flex-row"
-            style={{ animationDelay: "200ms" }}
+            style={{ animationDelay: `${TIME_MS.ANIMATION_DELAY_CTA}ms` }}
           >
             <Button
               asChild
               size="lg"
               className="group min-w-[160px] animate-fade-in-up"
             >
-              <Link href="/auth/register">
+              <Link href={ROUTES.AUTH.REGISTER}>
                 {t("cta_primary")}
                 <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
               </Link>
@@ -91,7 +92,7 @@ export default function Page() {
               size="lg"
               className="min-w-[160px] animate-fade-in-up"
             >
-              <Link href="/about-us">{t("cta_secondary")}</Link>
+              <Link href={ROUTES.ABOUT_US}>{t("cta_secondary")}</Link>
             </Button>
           </div>
         </div>
@@ -116,10 +117,11 @@ export default function Page() {
             return (
               <Card
                 key={feature.key}
-                className="group animate-fade-in-up border-border/50 transition-all duration-300 hover:border-border hover:shadow-md"
+                className="group animate-fade-in-up border-border/50 transition-all hover:border-border hover:shadow-md"
                 style={{
-                  animationDelay: `${index * 50}ms`,
+                  animationDelay: `${index * TIME_MS.ANIMATION_DELAY_STAGGER}ms`,
                   opacity: 0,
+                  transitionDuration: `${TIME_MS.ANIMATION_DURATION_CARD}ms`,
                 }}
               >
                 <CardHeader>

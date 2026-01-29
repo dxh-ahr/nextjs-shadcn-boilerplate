@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ROUTES } from "@/lib/constants";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -18,7 +20,6 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 const stats = [
   {
@@ -55,17 +56,17 @@ const quickActions = [
   {
     label: "Create Project",
     icon: Plus,
-    href: "/dashboard/projects/new",
+    href: ROUTES.DASHBOARD.PROJECTS_NEW,
   },
   {
     label: "View Reports",
     icon: FileText,
-    href: "/dashboard/reports",
+    href: ROUTES.DASHBOARD.REPORTS,
   },
   {
     label: "Analytics",
     icon: TrendingUp,
-    href: "/dashboard/analytics",
+    href: ROUTES.DASHBOARD.ANALYTICS,
   },
 ] as const;
 

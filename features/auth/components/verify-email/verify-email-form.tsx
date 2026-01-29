@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { verifyEmailAction } from "@/features/auth/actions";
+import { ROUTES } from "@/lib/constants";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -63,7 +64,7 @@ export function VerifyEmailForm() {
 
         // Navigate after a short delay to show success message
         setTimeout(() => {
-          router.push("/auth/login");
+          router.push(ROUTES.AUTH.LOGIN);
         }, 1500);
       } catch (error) {
         if (hasVerifiedRef.current) {
@@ -105,7 +106,9 @@ export function VerifyEmailForm() {
         <Button
           className="w-full sm:w-auto"
           onClick={() =>
-            router.push(`/auth/resend-verification-email?email=${email}`)
+            router.push(
+              `${ROUTES.AUTH.RESEND_VERIFICATION_EMAIL}?email=${email}`
+            )
           }
         >
           {t("resend_verification_email")}

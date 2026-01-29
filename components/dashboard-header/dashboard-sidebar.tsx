@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { BarChart3, FileText, Home, Settings, User, X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -13,31 +14,11 @@ interface DashboardSidebarProps {
 }
 
 const menuItems = [
-  {
-    href: "/dashboard",
-    labelKey: "overview",
-    icon: Home,
-  },
-  {
-    href: "/dashboard/analytics",
-    labelKey: "analytics",
-    icon: BarChart3,
-  },
-  {
-    href: "/dashboard/reports",
-    labelKey: "reports",
-    icon: FileText,
-  },
-  {
-    href: "/dashboard/settings",
-    labelKey: "settings",
-    icon: Settings,
-  },
-  {
-    href: "/dashboard/profile",
-    labelKey: "profile",
-    icon: User,
-  },
+  { href: ROUTES.DASHBOARD.ROOT, labelKey: "overview", icon: Home },
+  { href: ROUTES.DASHBOARD.ANALYTICS, labelKey: "analytics", icon: BarChart3 },
+  { href: ROUTES.DASHBOARD.REPORTS, labelKey: "reports", icon: FileText },
+  { href: ROUTES.DASHBOARD.SETTINGS, labelKey: "settings", icon: Settings },
+  { href: ROUTES.DASHBOARD.PROFILE, labelKey: "profile", icon: User },
 ] as const;
 
 export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
@@ -46,8 +27,8 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/dashboard") {
-      return pathname === "/dashboard";
+    if (href === ROUTES.DASHBOARD.ROOT) {
+      return pathname === ROUTES.DASHBOARD.ROOT;
     }
     return pathname.startsWith(href);
   };
@@ -72,7 +53,7 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
       >
         <div className="flex h-16 items-center justify-between border-b border-border/50 px-4">
           <Link
-            href="/dashboard"
+            href={ROUTES.DASHBOARD.ROOT}
             className="flex items-center gap-2 text-xl font-semibold text-foreground transition-colors hover:text-primary"
           >
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">

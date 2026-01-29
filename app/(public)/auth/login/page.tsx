@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LoginForm } from "@/features/auth/components";
+import { ROUTES } from "@/lib/constants";
 import { LogIn } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -36,7 +37,10 @@ export default function LoginPage() {
           <span className="text-muted-foreground">
             {t("dont_have_account")}{" "}
           </span>
-          <Link href="/auth/register" className="text-primary hover:underline">
+          <Link
+            href={ROUTES.AUTH.REGISTER}
+            className="text-primary hover:underline"
+          >
             {t("register_link")}
           </Link>
         </div>

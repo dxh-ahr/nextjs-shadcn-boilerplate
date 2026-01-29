@@ -21,6 +21,10 @@ export const registerSchema = z
       .string()
       .min(1, "Email is required")
       .regex(emailRegex, "Please enter a valid email address"),
+    companyName: z
+      .string()
+      .min(1, "Company name is required")
+      .min(2, "Company name must be at least 2 characters"),
     password: passwordSchema,
     confirmPassword: z.string(),
   })

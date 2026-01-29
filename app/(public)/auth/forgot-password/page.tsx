@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ForgotPasswordForm } from "@/features/auth/components";
+import { ROUTES } from "@/lib/constants";
 import { Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -33,7 +34,10 @@ export default function ForgotPasswordPage() {
         <ForgotPasswordForm />
 
         <div className="text-center text-sm">
-          <Link href="/auth/login" className="text-primary hover:underline">
+          <Link
+            href={ROUTES.AUTH.LOGIN}
+            className="text-primary hover:underline"
+          >
             {t("back_to_login")}
           </Link>
         </div>

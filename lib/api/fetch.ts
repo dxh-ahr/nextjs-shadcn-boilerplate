@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 
+import { COOKIE, HTTP, TIME } from "@/lib/constants";
 import { env } from "@/lib/env";
 
 export interface FetchOptions extends RequestInit {
@@ -18,14 +19,14 @@ const accessTokenCookieOptions = {
   path: "/",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  maxAge: 15 * 60, // 15 minutes
+  maxAge: TIME.ACCESS_TOKEN_COOKIE_MAX_AGE,
 };
 
 const refreshTokenCookieOptions = {
   path: "/",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  maxAge: 7 * 24 * 60 * 60, // 7 days
+  maxAge: TIME.REFRESH_TOKEN_COOKIE_MAX_AGE,
 };
 
 export async function getAuthToken(
@@ -33,32 +34,32 @@ export async function getAuthToken(
 ): Promise<string | null> {
   if (token) return token;
   const cookieStore = await cookies();
-  return cookieStore.get("dxh_access_token")?.value || null;
+  return cookieStore.get(COOKIE.ACCESS_TOKEN)?.value || null;
 }
 
 export async function getRefreshToken(): Promise<string | null> {
   const cookieStore = await cookies();
-  return cookieStore.get("dxh_refresh_token")?.value || null;
+  return cookieStore.get(COOKIE.REFRESH_TOKEN)?.value || null;
 }
 
 export async function setAuthToken(token: string): Promise<void> {
   const cookieStore = await cookies();
 
-  cookieStore.set("dxh_access_token", token, accessTokenCookieOptions);
-  cookieStore.set("dxh_refresh_token", token, refreshTokenCookieOptions);
+  cookieStore.set(COOKIE.ACCESS_TOKEN, token, accessTokenCookieOptions);
+  cookieStore.set(COOKIE.REFRESH_TOKEN, token, refreshTokenCookieOptions);
 }
 
 export async function clearAuthToken(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete("dxh_access_token");
-  cookieStore.delete("dxh_refresh_token");
+  cookieStore.delete(COOKIE.ACCESS_TOKEN);
+  cookieStore.delete(COOKIE.REFRESH_TOKEN);
 }
 
 async function buildHeaders(options: FetchOptions = {}): Promise<HeadersInit> {
   const headers = new Headers(options.headers);
 
   if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+    headers.set("Content-Type", HTTP.CONTENT_TYPE_JSON);
   }
 
   if (options.requireAuth !== false) {
@@ -93,7 +94,7 @@ export async function apiFetch<T = unknown>(
   });
 
   const contentType = response.headers.get("content-type");
-  const isJson = !!contentType?.includes("application/json");
+  const isJson = !!contentType?.includes(HTTP.CONTENT_TYPE_JSON);
 
   const data: unknown = isJson ? await response.json() : await response.text();
 

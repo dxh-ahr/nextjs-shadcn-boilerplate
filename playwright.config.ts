@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+import { TIME_MS } from "@/lib/constants";
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -76,7 +78,7 @@ export default defineConfig({
     command: "pnpm dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env["CI"],
-    timeout: 120 * 1000,
+    timeout: TIME_MS.PLAYWRIGHT_WEBSERVER_TIMEOUT,
     stdout: "ignore",
     stderr: "pipe",
   },

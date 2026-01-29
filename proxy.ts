@@ -1,19 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const protectedRoutes = ["/dashboard"];
-
-const authRoutes = [
-  "/auth/login",
-  "/auth/register",
-  "/auth/forgot-password",
-  "/auth/new-password",
-  "/auth/verify-email",
-  "/auth/verify-email-otp",
-  "/auth/resend-verification-email",
-];
+import { AUTH_ROUTES, COOKIE, PROTECTED_ROUTES, ROUTES } from "@/lib/constants";
 
 function isAuthenticated(request: NextRequest): boolean {
-  const accessToken = request.cookies.get("dxh_access_token");
+  const accessToken = request.cookies.get(COOKIE.ACCESS_TOKEN);
   return !!accessToken?.value;
 }
 
@@ -21,18 +11,18 @@ export function handleAuthRedirects(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
   const authenticated = isAuthenticated(request);
 
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
     pathname.startsWith(route)
   );
 
   if (isProtectedRoute && !authenticated) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    return NextResponse.redirect(new URL(ROUTES.AUTH.LOGIN, request.url));
   }
 
   if (isAuthRoute && authenticated) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL(ROUTES.DASHBOARD.ROOT, request.url));
   }
 
   return null;

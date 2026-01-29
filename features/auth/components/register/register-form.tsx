@@ -7,6 +7,7 @@ import {
   registerSchema,
   type RegisterInput,
 } from "@/features/auth/validations";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,7 @@ export function RegisterForm() {
       firstName: "",
       lastName: "",
       email: "",
+      companyName: "",
       password: "",
       confirmPassword: "",
     },
@@ -39,7 +41,7 @@ export function RegisterForm() {
       return;
     }
 
-    router.push("/auth/login");
+    router.push(ROUTES.AUTH.LOGIN);
     toast.success("User registered successfully, please verify your email.");
   };
 
@@ -77,6 +79,17 @@ export function RegisterForm() {
               id={field.name}
               type="email"
               placeholder={t("fields.email_placeholder")}
+              {...field}
+            />
+          )}
+        </FormField>
+
+        <FormField name="companyName" label={t("fields.companyName")}>
+          {(field) => (
+            <Input
+              id={field.name}
+              type="text"
+              placeholder={t("fields.companyName_placeholder")}
               {...field}
             />
           )}

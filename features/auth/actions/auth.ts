@@ -12,6 +12,7 @@ import {
 } from "@/features/auth/validations/auth";
 import { apiFetch, type ApiError } from "@/lib/api";
 import { getRefreshToken, setAuthToken } from "@/lib/api/fetch";
+import { API_ENDPOINTS, HTTP } from "@/lib/constants";
 import type { ApiResponse, LoginResponse, UserProfile } from "./type";
 
 export async function registerAction(data: RegisterInput) {
@@ -22,13 +23,13 @@ export async function registerAction(data: RegisterInput) {
       first_name: formData.firstName,
       last_name: formData.lastName,
       email: formData.email,
-      company_name: "test",
+      company_name: formData.companyName,
       password: formData.password,
       confirm_password: formData.confirmPassword,
     };
 
     const response = await apiFetch<ApiResponse<UserProfile>>(
-      "/api/auth/v1/register/",
+      API_ENDPOINTS.AUTH.REGISTER,
       {
         method: "POST",
         body: JSON.stringify(payload),
@@ -52,7 +53,7 @@ export async function loginAction(data: LoginInput) {
     };
 
     const response = await apiFetch<ApiResponse<LoginResponse>>(
-      "/api/auth/v1/login/",
+      API_ENDPOINTS.AUTH.LOGIN,
       {
         method: "POST",
         body: JSON.stringify(payload),
@@ -79,7 +80,7 @@ export async function forgotPasswordAction(data: ForgotPasswordInput) {
     };
 
     const response = await apiFetch<ApiResponse<null>>(
-      "/api/auth/v1/password/forgot/",
+      API_ENDPOINTS.AUTH.PASSWORD_FORGOT,
       {
         method: "POST",
         body: JSON.stringify(payload),
@@ -107,13 +108,13 @@ export async function resetPasswordAction(
     };
 
     const response = await apiFetch<ApiResponse<null>>(
-      "/api/auth/v1/password/reset/",
+      API_ENDPOINTS.AUTH.PASSWORD_RESET,
       {
         method: "POST",
         body: JSON.stringify(payload),
         requireAuth: false,
         headers: {
-          "X-Reset-Token": token,
+          [HTTP.HEADER_X_RESET_TOKEN]: token,
         },
       }
     );
@@ -127,7 +128,7 @@ export async function resetPasswordAction(
 export async function verifyEmailAction(code: string, email: string) {
   try {
     const response = await apiFetch<ApiResponse<null>>(
-      `/api/auth/v1/verification/email/verify/`,
+      API_ENDPOINTS.AUTH.VERIFICATION_EMAIL_VERIFY,
       {
         method: "POST",
         body: JSON.stringify({ code, email, type: "email_otp" }),
@@ -144,7 +145,7 @@ export async function verifyEmailAction(code: string, email: string) {
 export async function resendVerificationEmailAction(email: string) {
   try {
     const response = await apiFetch<ApiResponse<null>>(
-      `/api/auth/v1/verification/email/resend/`,
+      API_ENDPOINTS.AUTH.VERIFICATION_EMAIL_RESEND,
       {
         method: "POST",
         body: JSON.stringify({ email, type: "email_otp" }),
@@ -162,11 +163,14 @@ export async function logoutAction() {
   const refreshToken = await getRefreshToken();
 
   try {
-    const response = await apiFetch<ApiResponse<null>>("/api/auth/v1/logout/", {
-      method: "POST",
-      body: JSON.stringify({ refresh_token: refreshToken }),
-      requireAuth: true,
-    });
+    const response = await apiFetch<ApiResponse<null>>(
+      API_ENDPOINTS.AUTH.LOGOUT,
+      {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: refreshToken }),
+        requireAuth: true,
+      }
+    );
 
     return response;
   } catch (error) {

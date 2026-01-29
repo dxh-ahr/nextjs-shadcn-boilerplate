@@ -129,13 +129,15 @@
     "title": "404",
     "heading": "Page not found",
     "description": "The page you're looking for doesn't exist or has been moved.",
-    "back_home": "Back to Home"
+    "back_home": "Back to Home",
+    "back_dashboard": "Back to Dashboard"
   },
   "Error": {
     "title": "Something went wrong",
     "description": "We encountered an unexpected error. Please try again or return to the home page.",
     "try_again": "Try Again",
     "back_home": "Back to Home",
+    "back_dashboard": "Back to Dashboard",
     "error_details": "Error details"
   },
   "auth": {
@@ -148,6 +150,8 @@
         "name_placeholder": "John Doe",
         "email": "Email",
         "email_placeholder": "you@example.com",
+        "companyName": "Company Name",
+        "companyName_placeholder": "Acme Inc.",
         "password": "Password",
         "password_placeholder": "Enter your password",
         "confirm_password": "Confirm Password",

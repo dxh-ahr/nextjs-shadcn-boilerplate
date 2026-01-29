@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+
+import { IMAGE, TIME } from "./lib/constants";
 import { env } from "./lib/env";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
@@ -29,13 +31,15 @@ const nextConfig: NextConfig = {
   // Image optimization configuration
   images: {
     // Restrict allowed quality values to prevent abuse
-    qualities: [75, 90, 100],
+    qualities: [...IMAGE.QUALITIES],
 
     // Custom cache TTL (1 year for production, default is 4 hours)
-    minimumCacheTTL: isProduction ? 60 * 60 * 24 * 365 : 60 * 60 * 24,
+    minimumCacheTTL: isProduction
+      ? TIME.IMAGE_CACHE_TTL_PROD
+      : TIME.IMAGE_CACHE_TTL_DEV,
 
     // Security limits (default is 3, but explicit for clarity)
-    maximumRedirects: 3,
+    maximumRedirects: IMAGE.MAX_REDIRECTS,
 
     // SVG handling with security
     dangerouslyAllowSVG: true,
@@ -67,7 +71,7 @@ const nextConfig: NextConfig = {
       },
       {
         key: "Strict-Transport-Security",
-        value: "max-age=63072000; includeSubDomains; preload",
+        value: `max-age=${TIME.HSTS_MAX_AGE}; includeSubDomains; preload`,
       },
       {
         key: "X-Frame-Options",
@@ -143,7 +147,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: `public, max-age=${TIME.STATIC_CACHE_MAX_AGE}, immutable`,
           },
         ],
       },
@@ -153,7 +157,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: `public, max-age=${TIME.STATIC_CACHE_MAX_AGE}, immutable`,
           },
         ],
       },
@@ -163,7 +167,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: `public, max-age=${TIME.STATIC_CACHE_MAX_AGE}, immutable`,
           },
         ],
       },

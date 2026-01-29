@@ -4,6 +4,7 @@ import { LogOut, Menu, Settings, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -16,8 +17,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logoutAction } from "@/features/auth/actions/auth";
+import type { ApiResponse } from "@/features/auth/actions/type";
 import { useIsAuthenticated } from "@/hooks/use-authenticated";
+import { API_ENDPOINTS, ROUTES } from "@/lib/constants";
 
 interface DashboardHeaderProps {
   readonly onMenuClick: () => void;
@@ -30,19 +32,33 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
   const { isAuthenticated } = useIsAuthenticated();
 
-  const handleLogout = async () => {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+
     try {
-      const response = await logoutAction();
+      // TODO: Uncomment this when the logout endpoint works properly
+      // const response = await logoutAction();
+
+      const result = await fetch(API_ENDPOINTS.CLEAR_AUTH);
+      const response = (await result.json()) as ApiResponse<null>;
 
       if (response.status !== "success") {
         toast.error(response.message || "Logout failed");
         return;
       }
 
-      router.push("/auth/login");
+      router.push(ROUTES.AUTH.LOGIN);
       toast.success("Logged out successfully");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Logout failed");
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -82,7 +98,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
                   <Link
-                    href="/dashboard/profile"
+                    href={ROUTES.DASHBOARD.PROFILE}
                     className="w-full cursor-pointer"
                   >
                     <User className="mr-2 size-4" />
@@ -91,7 +107,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
-                    href="/dashboard/settings"
+                    href={ROUTES.DASHBOARD.SETTINGS}
                     className="w-full cursor-pointer"
                   >
                     <Settings className="mr-2 size-4" />
@@ -99,14 +115,15 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild disabled={isLoggingOut}>
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full cursor-pointer text-left"
+                    disabled={isLoggingOut}
+                    className="w-full cursor-pointer text-left disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <LogOut className="mr-2 size-4" />
-                    {t("nav.logout")}
+                    {isLoggingOut ? "Logging out..." : t("nav.logout")}
                   </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>

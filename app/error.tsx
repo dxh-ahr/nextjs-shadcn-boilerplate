@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  DashboardHeader,
+  DashboardSidebar,
+} from "@/components/dashboard-header";
+import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,10 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ROUTES } from "@/lib/constants";
 import { AlertCircle, Home, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type ErrorWithDigest = Error & { digest?: string };
 
@@ -22,13 +29,25 @@ interface ErrorPageProps {
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   const t = useTranslations("Error");
+  const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const isDashboardRoute = pathname?.startsWith(ROUTES.DASHBOARD.ROOT) ?? false;
 
   useEffect(() => {
     // Log error to error reporting service
     console.error("Application error:", error);
   }, [error]);
 
-  return (
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
+  const errorContent = (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-8 text-center">
@@ -81,13 +100,36 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
             {t("try_again")}
           </Button>
           <Button asChild size="lg" className="group min-w-[160px]">
-            <Link href="/">
+            <Link href={isDashboardRoute ? ROUTES.DASHBOARD.ROOT : ROUTES.HOME}>
               <Home className="mr-2 size-4" />
-              {t("back_home")}
+              {isDashboardRoute ? t("back_dashboard") : t("back_home")}
             </Link>
           </Button>
         </div>
       </div>
     </div>
+  );
+
+  if (isDashboardRoute) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <DashboardHeader onMenuClick={toggleSidebar} />
+
+        <div className="flex flex-1">
+          <DashboardSidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+
+          <main className="flex-1 lg:ml-64">
+            <div className="p-4 sm:p-6 lg:p-8">{errorContent}</div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      {errorContent}
+    </>
   );
 }

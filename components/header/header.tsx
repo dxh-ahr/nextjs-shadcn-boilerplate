@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -18,9 +19,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { href: "/", labelKey: "home" },
-  { href: "/about-us", labelKey: "about" },
-  { href: "/contact", labelKey: "contact" },
+  { href: ROUTES.HOME, labelKey: "home" },
+  { href: ROUTES.ABOUT_US, labelKey: "about" },
+  { href: ROUTES.CONTACT, labelKey: "contact" },
 ] as const;
 
 export function Header() {
@@ -41,8 +42,8 @@ export function Header() {
   }, []);
 
   const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
+    if (href === ROUTES.HOME) {
+      return pathname === ROUTES.HOME;
     }
     return pathname.startsWith(href);
   };
@@ -90,7 +91,7 @@ export function Header() {
             <LocaleSwitcher />
             <ThemeSwitcher />
             <Button asChild size="sm">
-              <Link href="/auth/register">{t("cta")}</Link>
+              <Link href={ROUTES.AUTH.REGISTER}>{t("cta")}</Link>
             </Button>
           </div>
 
@@ -136,7 +137,7 @@ export function Header() {
                 <div className="p-2">
                   <Button asChild size="sm" className="w-full">
                     <Link
-                      href="/auth/register"
+                      href={ROUTES.AUTH.REGISTER}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {t("cta")}

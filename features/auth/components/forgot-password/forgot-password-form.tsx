@@ -7,6 +7,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordInput,
 } from "@/features/auth/validations";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -35,7 +36,7 @@ export function ForgotPasswordForm() {
       return;
     }
 
-    router.push("/auth/login");
+    router.push(ROUTES.AUTH.LOGIN);
     toast.success(
       response.message || "Password reset link sent to your email address"
     );

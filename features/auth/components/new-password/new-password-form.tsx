@@ -7,6 +7,7 @@ import {
   resetPasswordSchema,
   type ResetPasswordInput,
 } from "@/features/auth/validations";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
@@ -24,7 +25,7 @@ export function NewPasswordForm() {
   const token = searchParams.get("token");
 
   if (!token) {
-    redirect("/auth/login");
+    redirect(ROUTES.AUTH.LOGIN);
   }
 
   const form = useForm<ResetPasswordInput>({
@@ -44,7 +45,7 @@ export function NewPasswordForm() {
       return;
     }
 
-    router.push("/auth/login");
+    router.push(ROUTES.AUTH.LOGIN);
     toast.success(response.message || "Password reset successful");
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Locale } from "@/i18n/types";
+import { COOKIE, DEFAULT_LOCALE, TIME } from "@/lib/constants";
 import { getCookie, setCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,18 +16,18 @@ export const locales: readonly Locale[] = ["en", "fr"] as const;
 
 export function LocaleSwitcher() {
   const router = useRouter();
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLocale((getCookie("locale") as Locale) || "en");
+    setLocale((getCookie(COOKIE.LOCALE) as Locale) || DEFAULT_LOCALE);
   }, []);
 
   const handleLocaleChange = (newLocale: Locale) => {
     setLocale(newLocale);
-    setCookie("locale", newLocale, {
+    setCookie(COOKIE.LOCALE, newLocale, {
       path: "/",
-      maxAge: 60 * 60 * 24 * 365, // 1 year
+      maxAge: TIME.LOCALE_COOKIE_MAX_AGE,
     });
     router.refresh();
   };

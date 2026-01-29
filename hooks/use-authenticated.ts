@@ -1,5 +1,6 @@
 "use client";
 
+import { API_ENDPOINTS } from "@/lib/constants";
 import { useEffect, useState } from "react";
 
 export function useIsAuthenticated() {
@@ -7,7 +8,7 @@ export function useIsAuthenticated() {
 
   useEffect(() => {
     const getToken = async () => {
-      const response = await fetch("/api/auth");
+      const response = await fetch(API_ENDPOINTS.AUTH_CHECK);
       const data = await response.json();
       const token = data.token;
       setIsAuthenticated(token !== null);

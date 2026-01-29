@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, useForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { verifyEmailAction } from "@/features/auth/actions";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -48,7 +49,9 @@ export function VerifyEmailOtpForm() {
       return;
     }
 
-    router.push(`/auth/verify-email?code=${data.code}&email=${data.email}`);
+    router.push(
+      `${ROUTES.AUTH.VERIFY_EMAIL}?code=${data.code}&email=${data.email}`
+    );
     toast.success(response.message || t("success_message"));
   };
 

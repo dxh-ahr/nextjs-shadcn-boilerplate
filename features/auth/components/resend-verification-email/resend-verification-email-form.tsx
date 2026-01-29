@@ -8,6 +8,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordInput,
 } from "@/features/auth/validations";
+import { ROUTES } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -45,7 +46,7 @@ export function ResendVerificationEmailForm() {
     }
 
     setCooldownSeconds(120);
-    router.push(`/auth/verify-email-otp?email=${data.email}`);
+    router.push(`${ROUTES.AUTH.VERIFY_EMAIL_OTP}?email=${data.email}`);
     toast.success(response.message || t("success_toast"));
   };
 
