@@ -90,7 +90,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           {isAuthenticated && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="h-9 w-9">
+                <Button variant="outline" size="icon" className="size-9">
                   <User className="size-5" />
                   <span className="sr-only">User menu</span>
                 </Button>

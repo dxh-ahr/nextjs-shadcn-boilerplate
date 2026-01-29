@@ -73,49 +73,55 @@ export function RegisterForm() {
           </FormField>
         </div>
 
-        <FormField name="email" label={t("fields.email")}>
-          {(field) => (
-            <Input
-              id={field.name}
-              type="email"
-              placeholder={t("fields.email_placeholder")}
-              {...field}
-            />
-          )}
-        </FormField>
+        <div className="flex justify-between flex-col sm:flex-row gap-3">
+          <FormField name="email" label={t("fields.email")}>
+            {(field) => (
+              <Input
+                id={field.name}
+                type="email"
+                placeholder={t("fields.email_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
 
-        <FormField name="companyName" label={t("fields.companyName")}>
-          {(field) => (
-            <Input
-              id={field.name}
-              type="text"
-              placeholder={t("fields.companyName_placeholder")}
-              {...field}
-            />
-          )}
-        </FormField>
+          <FormField name="companyName" label={t("fields.companyName")}>
+            {(field) => (
+              <Input
+                id={field.name}
+                type="text"
+                placeholder={t("fields.companyName_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
+        </div>
 
-        <FormField name="password" label={t("fields.password")}>
-          {(field) => (
-            <Input
-              id={field.name}
-              type="password"
-              placeholder={t("fields.password_placeholder")}
-              {...field}
-            />
-          )}
-        </FormField>
-
-        <FormField name="confirmPassword" label={t("fields.confirm_password")}>
-          {(field) => (
-            <Input
-              id={field.name}
-              type="password"
-              placeholder={t("fields.confirm_password_placeholder")}
-              {...field}
-            />
-          )}
-        </FormField>
+        <div className="flex justify-between flex-col sm:flex-row gap-3">
+          <FormField name="password" label={t("fields.password")}>
+            {(field) => (
+              <Input
+                id={field.name}
+                type="password"
+                placeholder={t("fields.password_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
+          <FormField
+            name="confirmPassword"
+            label={t("fields.confirm_password")}
+          >
+            {(field) => (
+              <Input
+                id={field.name}
+                type="password"
+                placeholder={t("fields.confirm_password_placeholder")}
+                {...field}
+              />
+            )}
+          </FormField>
+        </div>
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? t("submitting") : t("submit")}
